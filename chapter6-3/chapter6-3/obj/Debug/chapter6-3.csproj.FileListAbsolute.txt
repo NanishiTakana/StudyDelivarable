@@ -1,0 +1,7 @@
+D:\study\StudyDelivarable\chapter6-3\chapter6-3\bin\Debug\chapter6-3.exe.config
+D:\study\StudyDelivarable\chapter6-3\chapter6-3\bin\Debug\chapter6-3.exe
+D:\study\StudyDelivarable\chapter6-3\chapter6-3\bin\Debug\chapter6-3.pdb
+D:\study\StudyDelivarable\chapter6-3\chapter6-3\obj\Debug\chapter6-3.csprojAssemblyReference.cache
+D:\study\StudyDelivarable\chapter6-3\chapter6-3\obj\Debug\chapter6-3.csproj.CoreCompileInputs.cache
+D:\study\StudyDelivarable\chapter6-3\chapter6-3\obj\Debug\chapter6-3.exe
+D:\study\StudyDelivarable\chapter6-3\chapter6-3\obj\Debug\chapter6-3.pdb
