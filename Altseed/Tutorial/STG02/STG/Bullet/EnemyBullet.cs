@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace STG
 {
-    class EnemyBullet : asd.TextureObject2D
+    public class EnemyBullet : CollidableObject
     {
-        // 敵弾の速度ベクトル。
-        private asd.Vector2DF moveVelocity;
 
         // コンストラクタ(敵の初期位置を引数として受け取る。)
-        public EnemyBullet(asd.Vector2DF pos, asd.Vector2DF movevelocity)
+        public EnemyBullet(asd.Vector2DF pos)
             : base()
         {
             // 敵弾のインスタンスの位置を設定する。
@@ -24,24 +22,29 @@ namespace STG
             // 敵弾のインスタンスに画像の中心位置を設定する。
             CenterPosition = new asd.Vector2DF(Texture.Size.X / 2.0f, Texture.Size.Y / 2.0f);
 
-            //　敵弾の速度ベクトルを設定する。
-            moveVelocity = movevelocity;
+            // 画像の半分の大きさを Radius とする
+            Radius = Texture.Size.X / 2.0f;
+
         }
 
-        protected override void OnUpdate()
+        protected void DisposeFromGame()
         {
-            //　毎フレーム、速度ベクトル分移動する。
-            Position += moveVelocity;
-
             // 画面外に出たら
             var windowSize = asd.Engine.WindowSize;
             if (Position.Y < -Texture.Size.Y || Position.Y > windowSize.Y + Texture.Size.Y || Position.X < -Texture.Size.X || Position.X > windowSize.X + Texture.Size.X)
             {
-           　    // 削除する。
-          　     Dispose();
+                // 削除する。
+                Dispose();
             }
-
-
         }
+        // 衝突時の動作(子クラスでoverrideが可能)
+        public override void OnCollide(CollidableObject obj)
+        {
+
+            // ゲームからオブジェクトを消滅させる
+            Dispose();
+        }
+
+
     }
 }

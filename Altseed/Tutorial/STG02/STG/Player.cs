@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace STG
 {
-    public class Player : asd.TextureObject2D
+    public class Player : CollidableObject
     {
         public Player()
         {
@@ -22,6 +22,9 @@ namespace STG
 
         protected override void OnUpdate()
         {
+            foreach (var obj in Layer.Objects)
+                CollideWith(obj as CollidableObject);
+
             // もし、上ボタンが押されていたら、位置に(0,-1)を足す。
             if (asd.Engine.Keyboard.GetKeyState(asd.Keys.Up) == asd.ButtonState.Hold)
             {
@@ -48,7 +51,7 @@ namespace STG
             {
                 Bullet bullet = new Bullet(Position + new asd.Vector2DF(0, -30), "Resources/PlayerBullet.png");
                 // 弾のインスタンスをエンジンに追加する。
-                asd.Engine.AddObject2D(bullet);
+                Layer.AddObject(bullet);
 
             }
 
@@ -57,7 +60,7 @@ namespace STG
             {
                 Bullet bullet = new Bullet(Position + new asd.Vector2DF(0, -30), "Resources/PlayerBullet_Big.png");
                 // 弾のインスタンスをエンジンに追加する。
-                asd.Engine.AddObject2D(bullet);
+                Layer.AddObject(bullet);
             }
 
             // プレイヤーの位置を取得する。
@@ -71,8 +74,43 @@ namespace STG
             // プレイヤーの位置を設定する。
             Position = position;
 
+            // プレイヤーの Radius は小さめにしておく
+            Radius = Texture.Size.X / 8.0f;
+
 
         }
+
+        // 衝突時の動作
+        public override void OnCollide(CollidableObject obj)
+        {
+            // このインスタンスと同じ位置にエフェクトインスタンスを生成して、エンジンに追加する。
+            Layer.AddObject(new BreakObjectEffect(Position));
+            // ゲームからオブジェクトを消滅させる
+            Dispose();
+        }
+
+        // 自機の弾との当たり判定をコントロールするメソッド
+        protected void CollideWith(CollidableObject obj)
+        {
+            // 当たり判定の相手が見つかってない場合はメソッドを終了
+            if (obj == null)
+                return;
+
+            // obj が Bulletである場合にのみelse内を動作させる
+            if (obj is EnemyBullet)
+            {
+                // obj が enemybullet であることを明示
+                CollidableObject enemyBullet = obj;
+
+                // bulletと衝突した場合には、衝突時処理を行う
+                if (IsCollide(enemyBullet))
+                {
+                    OnCollide(enemyBullet);
+                    enemyBullet.OnCollide(this);
+                }
+            }
+        }
+
 
 
 
