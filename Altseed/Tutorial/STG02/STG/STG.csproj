@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bullet\Laser.cs" />
+    <Compile Include="Enemy\Boss.cs" />
     <Compile Include="MovingBackground.cs" />
     <Compile Include="BreakObjectEffect.cs" />
     <Compile Include="Bullet\Bullet.cs" />

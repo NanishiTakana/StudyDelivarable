@@ -51,8 +51,8 @@ namespace STG
             // プレイヤーのインスタンスをレイヤーに追加する。
             layer.AddObject(player);
 
-            // レイヤーに反復して移動する敵のインスタンスを生成する。
-            layer.AddObject(new VortexShotEnemy(new asd.Vector2DF(320.0f, 100.0f), player));
+            //レイヤーにボスを追加する
+            layer.AddObject(new Boss(new asd.Vector2DF(320.0f, 100.0f), player));
         }
 
         // シーンを変更中か?
