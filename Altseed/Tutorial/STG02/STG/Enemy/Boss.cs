@@ -24,6 +24,10 @@ namespace STG
         private asd.Vector2DF destHPLine;
         private const int diameterHPLine = 20;
 
+        //Laserのインスタンスの情報をBossが持つようにする
+        private Laser laserRef;
+
+
 
         public Boss(asd.Vector2DF pos, Player player)
             : base(pos, player)
@@ -172,10 +176,10 @@ namespace STG
         private void BossLaser()
         {
             // LaserをBossが制御できるように、Laserのインスタンスの情報をBossが持つようにする
-            var laser = new Laser(player, this);
+            var laserRef = new Laser(player, this);
 
             // Laserをレイヤーに登録する
-            Layer.AddObject(laser);
+            Layer.AddObject(laserRef);
         }
 
         private void BossVortexShot(float degree)

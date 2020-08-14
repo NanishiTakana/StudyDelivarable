@@ -12,10 +12,29 @@ namespace STG
     {
         Player player = null;
 
+        // シーンを変更中か?
+        bool isSceneChanging = false;
+
+        // 敵の出現するレイヤーを持つ
+        asd.Layer2D gameLayer;
+
+        // ステージの最後にボスが出る
+        Boss boss;
+
+        // ステージ数を管理
+        int stage;
+
+        // ゲームの経過時間を管理
+        int count;
+
+        // ステージごとに敵を入れておくキューの配列(今回は3つ)
+        Queue<Enemy>[] enemyQueues = new Queue<Enemy>[3];
+
+
         protected override void OnRegistered()
         {
             // 2Dを表示するレイヤーのインスタンスを生成する。
-            asd.Layer2D layer = new asd.Layer2D();
+            gameLayer = new asd.Layer2D();
             asd.Layer2D backgroundLayer = new asd.Layer2D();
 
             // レイヤーの描画優先度を設定する（デフォルトで0）
@@ -23,7 +42,7 @@ namespace STG
 
 
             // シーンにレイヤーのインスタンスを追加する。
-            AddLayer(layer);
+            AddLayer(gameLayer);
             AddLayer(backgroundLayer);
 
             // Background オブジェクトを生成する。ここで画像のパスを設定します。
@@ -49,14 +68,15 @@ namespace STG
             player = new Player();
 
             // プレイヤーのインスタンスをレイヤーに追加する。
-            layer.AddObject(player);
+            gameLayer.AddObject(player);
 
-            //レイヤーにボスを追加する
-            layer.AddObject(new Boss(new asd.Vector2DF(320.0f, 100.0f), player));
+            // stage を初期化する
+            initAllStage();
+
+
         }
 
-        // シーンを変更中か?
-        bool isSceneChanging = false;
+
         protected override void OnUpdated()
         {
             // もしシーンが変更中でなく、プレイヤーが倒されていたら処理を行う。
@@ -68,8 +88,132 @@ namespace STG
                 // シーンを変更中にする。
                 isSceneChanging = true;
             }
+            // stage を初期化する
+            initAllStage();
         }
 
+        private void initAllStage()
+        {
+            // 最初のステージを0とする
+            stage = 0;
+
+            // ゲーム内のカウントを0にする
+            count = 0;
+
+            // ステージ0用の敵をセットする
+            initStage0();
+
+            // ステージ1用の敵をセットする
+            initStage1();
+
+            // ステージ2用の敵をセットする
+            initStage2();
+        }
+
+        // ステージ0に出現する敵を設定する
+        private void initStage0()
+        {
+            // enemyQueue[0]にQueue<Enemy>をインスタンス化する。このキューにステージ0の敵を入れておく。
+            enemyQueues[0] = new Queue<Enemy>();
+
+            // 敵を射出する速度 moveVelocity を設定しておく
+            asd.Vector2DF moveVelocity = new asd.Vector2DF(1.0f, 0.0f);
+
+            // 5回ループする
+            for (int i = 0; i < 5; i++)
+            {
+                // 速度を60度の向きに
+                moveVelocity.Degree = 60;
+
+                // 左側に敵を出現させる
+                enemyQueues[0].Enqueue(new StraightMovingEnemy(new asd.Vector2DF(100.0f, 0.0f), moveVelocity, player));
+
+                // 速度を120度の向きに
+                moveVelocity.Degree = 120;
+
+                // 右側に敵を出現させる
+                enemyQueues[0].Enqueue(new StraightMovingEnemy(new asd.Vector2DF(540.0f, 0.0f), moveVelocity, player));
+            }
+
+            // 10回ループする
+            for (int i = 0; i < 10; i++)
+            {
+                // 速度を90度の向きに
+                moveVelocity.Degree = 90;
+
+                // 左側に敵を出現させる
+                enemyQueues[0].Enqueue(new StraightMovingEnemy(new asd.Vector2DF(100.0f, 0.0f), moveVelocity, player));
+            }
+
+            // 10回ループする
+            for (int i = 0; i < 10; i++)
+            {
+                // 速度を90度の向きに
+                moveVelocity.Degree = 90;
+
+                // 右側に敵を出現させる
+                enemyQueues[0].Enqueue(new StraightMovingEnemy(new asd.Vector2DF(540.0f, 0.0f), moveVelocity, player));
+            }
+
+        }
+
+        private void initStage1()
+        {
+            // ステージ0同様に設定していく
+            enemyQueues[1] = new Queue<Enemy>();
+        }
+        private void initStage2()
+        {
+            // ステージ0同様に設定していく
+            enemyQueues[2] = new Queue<Enemy>();
+        }
+
+        private void updateStage()
+        {
+            // ステージに対応するキューが空でないならば
+            if (enemyQueues[stage].Count > 0)
+            {
+                // countが144の倍数の時
+                // (調整用に一定の時間(count>100)を置く)
+                if (count % 144 == 0 && count > 100)
+                {
+                    // 敵を出現させる
+                    gameLayer.AddObject(enemyQueues[stage].Dequeue());
+                }
+            }
+
+            // そのステージの敵が出現し終わったら
+            else
+            {
+                // ボスが出現してないときに
+                if (boss == null)
+                {
+                    // ボスを出現させる
+                    boss = new Boss(new asd.Vector2DF(320.0f, 0.0f), player);
+
+                    // ボスをレイヤーに追加する
+                    gameLayer.AddObject(boss);
+                }
+
+                else
+                {
+                    // ボスが倒れたかつステージが2未満の時
+                    if (!boss.IsAlive && stage < 2)
+                    {
+                        // ボスを初期化しておいて
+                        boss = null;
+
+                        // ステージを先に進める
+                        ++stage;
+
+                        // ステージが進んだら count を 0 とする。
+                        count = 0;
+                    }
+                }
+            }
+            // updateStage ごとに count を進める
+            ++count;
+        }
 
     }
 }

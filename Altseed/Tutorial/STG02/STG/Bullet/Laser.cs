@@ -34,7 +34,6 @@ namespace STG
         private int validCount;
 
 
-
         public Laser(Player playerRef, Boss bossRef)
         {
             // 目標点となるプレイヤー・ボスの参照を保持する
@@ -61,7 +60,7 @@ namespace STG
             boss.AddChild(this,  asd.ChildManagementMode.Nothing, asd.ChildTransformingMode.Position);
 
             // 絶対座標として globalPos を取得する
-            globalPos = GetGlobalPosition();
+            globalPos = boss.Position;
 
             // direction の初期の向き・長さを決める
             direction = player.Position - globalPos;
@@ -69,7 +68,7 @@ namespace STG
 
             // 目標座標を割り出す
             // （単純にプレイヤーの座標を割り当てるとレーザーが画面内で途切れてしまう）
-            destPos = globalPos + direction;
+            destPos = boss.Position + direction;
 
             // カウンタを初期化する
             count = 0;
@@ -104,7 +103,7 @@ namespace STG
                 startAlpha += (byte)((255 - startAlpha) / startCount);
 
                 // 予測線を表示する　
-                DrawLineAdditionally(GetGlobalPosition(), destPos, new asd.Color(120, 160, 255, startAlpha), 5, asd.AlphaBlendMode.Add, 0);
+                DrawLineAdditionally(GetGlobalPosition() , destPos, new asd.Color(120, 160, 255, startAlpha), 5, asd.AlphaBlendMode.Add, 0);
             }
 
             // レーザーが照射されている時の処理

@@ -109,6 +109,7 @@ namespace STG
                     enemyBullet.OnCollide(this);
                 }
             }
+
         }
 
 
