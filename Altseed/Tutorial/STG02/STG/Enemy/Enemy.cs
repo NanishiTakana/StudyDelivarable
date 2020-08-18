@@ -14,6 +14,12 @@ namespace STG
         // プレイヤーへの参照（継承先のクラスで使いまわすため、protectedに設定する。）
         protected Player player;
 
+        // ショットの効果音。継承先のクラスでも再生できるようにprotectedに設定する。
+        protected asd.SoundSource shotSound;
+
+        // 破壊されるときの効果音。
+        private asd.SoundSource deathSound;
+
         // コンストラクタ(敵の初期位置を引数として受け取る。)
         public Enemy(asd.Vector2DF pos, Player player)
             : base()
@@ -36,6 +42,13 @@ namespace STG
 
             // Playerクラスへの参照を保持する。
             this.player = player;
+
+            // ショットの効果音を読み込む。
+            shotSound = asd.Engine.Sound.CreateSoundSource("Resources/Shot2.wav", true);
+
+            // 破壊されるときの効果音を読み込む。
+            deathSound = asd.Engine.Sound.CreateSoundSource("Resources/Explode.wav", true);
+
         }
 
         protected override void OnUpdate()
@@ -64,6 +77,8 @@ namespace STG
             asd.Vector2DF dirVector = new asd.Vector2DF(1, 0);
             dirVector.Degree = degree;
             Layer.AddObject(new StraightMovingEnemyBullet(Position, dirVector));
+
+            asd.Engine.Sound.Play(shotSound);
         }
 
 
@@ -72,6 +87,8 @@ namespace STG
         {
             // このインスタンスと同じ位置にエフェクトインスタンスを生成して、エンジンに追加する。
             Layer.AddObject(new BreakObjectEffect(Position));
+
+            asd.Engine.Sound.Play(deathSound);
             // ゲームからオブジェクトを消滅させる
             Dispose();
         }

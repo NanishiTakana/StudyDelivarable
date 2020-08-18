@@ -27,8 +27,6 @@ namespace STG
         //Laserのインスタンスの情報をBossが持つようにする
         private Laser laserRef;
 
-
-
         public Boss(asd.Vector2DF pos, Player player)
             : base(pos, player)
         {
@@ -39,6 +37,7 @@ namespace STG
 
             // CenterPositionを上書きする
             CenterPosition = new asd.Vector2DF(Texture.Size.X / 2.0f, Texture.Size.Y / 2.0f);
+
             // HPを設定する
             HP = maxHP;
 
@@ -63,18 +62,14 @@ namespace STG
             // HPゲージを描画する
             DrawLineAdditionally(startHPLine, destHPLine, red, diameterHPLine, asd.AlphaBlendMode.Blend, 30);
 
-            // ボスの位置を更新
+     // ボスの位置を更新
             Position += moveVelocity;
 
             // 一定の間隔で速度を更新する
+
             if (count % 60 == 0)
             {
-                //ここで行う処理は、UpdateRandVelocity に移動させる。
                 UpdateRandVelocity();
-                //BossAroundShot();
-                BossLaser();
-                BossVortexShot(count * 7);
-                
             }
             // ボスが画面外に出た場合に、速度を更新する
             else if (Position.Y < Texture.Size.Y / 2.0f
@@ -86,9 +81,95 @@ namespace STG
             }
 
 
+            // HPの量で行動パターンを変える
+
+            // HPが3/4になる前の状態で
+            if (maxHP * 3 / 4 < HP)
+            {
+                // ここで、攻撃パターンを定義したメソッドを呼び出す
+                if (count % 80 == 0)
+                {
+                    BossAroundShot();
+                    BossLaser();
+
+                }
+
+            }
+
+            // HPが半分になる前、かつ、HPが3/4を過ぎた状態で
+            else if (maxHP / 2 < HP && HP <= maxHP * 3 / 4)
+            {
+                // ここで、攻撃パターンを定義したメソッドを呼び出す
+                if (count % 80 == 0)
+                {
+                    BossAroundShot();
+
+                }
+                if (count % 5 == 0)
+                {
+                    BossVortexShot(count * 7);
+                }
+
+
+            }
+
+            // HPが1/4になる前、かつ、HPが半分を過ぎた状態で
+            else if (maxHP / 4 < HP && HP <= maxHP / 2)
+            {
+                // ここで、攻撃パターンを定義したメソッドを呼び出す
+                if (count % 80 == 0)
+                {
+                    BossAroundShot();
+                    BossLaser();
+
+                }
+                // レーザーをまだ出してない、または、前打ったレーザーが撃ち終わっている、ならば
+                if (laserRef == null || !laserRef.IsAlive)
+                {
+                    // 一定の間隔で BossLaser をする
+                    if (count % 300 == 0)
+                    {
+                        BossLaser();
+                    }
+
+                }
+            }
+            // HPが1/4を過ぎた状態で
+            else
+            {
+                // ここで、攻撃パターンを定義したメソッドを呼び出す
+                if (count % 40 == 0)
+                {
+                    BossAroundShot();
+                    BossLaser();
+
+                }
+                if (count % 5 == 0)
+                {
+                    BossVortexShot(count * 7);
+                }
+
+                // レーザーをまだ出してない、または、前打ったレーザーが撃ち終わっている、ならば
+                if (laserRef == null || !laserRef.IsAlive)
+                {
+                    // 一定の間隔で BossLaser をする
+                    if (count % 300 == 0)
+                    {
+                        BossLaser();
+                    }
+
+                }
+            }
+
+            // HPが0以下ならば
+            if (HP <= 0)
+            {
+                // Bossを消去する
+                Dispose();
+            }
+
             // カウンタの増加機能を使いまわすため基底(Enemy)クラスのOnUpdateを呼び出す。
             base.OnUpdate();
-
 
 
         }
@@ -171,6 +252,7 @@ namespace STG
             // 弾をレイヤーに登録
             Layer.AddObject(new StraightMovingEnemyBullet(Position, dirVector));
 
+
         }
 
         private void BossLaser()
@@ -207,6 +289,7 @@ namespace STG
 
             // 弾をレイヤーに登録する
             Layer.AddObject(new StraightMovingEnemyBullet(cannon4Pos, dirVector));
+
         }
 
 

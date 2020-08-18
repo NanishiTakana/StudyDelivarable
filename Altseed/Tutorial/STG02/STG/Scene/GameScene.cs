@@ -30,6 +30,8 @@ namespace STG
         // ステージごとに敵を入れておくキューの配列(今回は3つ)
         Queue<Enemy>[] enemyQueues = new Queue<Enemy>[3];
 
+        
+
 
         protected override void OnRegistered()
         {
@@ -72,10 +74,7 @@ namespace STG
 
             // stage を初期化する
             initAllStage();
-
-
         }
-
 
         protected override void OnUpdated()
         {
@@ -88,8 +87,8 @@ namespace STG
                 // シーンを変更中にする。
                 isSceneChanging = true;
             }
-            // stage を初期化する
-            initAllStage();
+            // stage を更新する 
+            updateStage();
         }
 
         private void initAllStage()

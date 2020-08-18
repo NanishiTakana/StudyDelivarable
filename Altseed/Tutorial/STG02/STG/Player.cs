@@ -8,6 +8,12 @@ namespace STG
 {
     public class Player : CollidableObject
     {
+        // ショットの効果音。
+        private asd.SoundSource shotSound;
+
+        // 破壊されたときの効果音。
+        private asd.SoundSource deathSound;
+
         public Player()
         {
             // 画像を読み込み、プレイヤーのインスタンスに画像を設定する。
@@ -16,6 +22,15 @@ namespace STG
             CenterPosition = new asd.Vector2DF(Texture.Size.X / 2.0f, Texture.Size.Y / 2.0f);
             // プレイヤーの位置を変更する。
             Position = new asd.Vector2DF(320, 240);
+            // ショットの効果音を読み込む。
+            shotSound = asd.Engine.Sound.CreateSoundSource("Resources/Shot.wav", true);
+
+            // 破壊されたときの効果音を読み込む。
+            deathSound = asd.Engine.Sound.CreateSoundSource("Resources/Explode.wav", true);
+
+            // プレイヤーの Radius は小さめにしておく
+            Radius = Texture.Size.X / 8.0f;
+
         }
 
 
@@ -28,22 +43,22 @@ namespace STG
             // もし、上ボタンが押されていたら、位置に(0,-1)を足す。
             if (asd.Engine.Keyboard.GetKeyState(asd.Keys.Up) == asd.ButtonState.Hold)
             {
-                Position = Position + new asd.Vector2DF(0, -1);
+                Position = Position + new asd.Vector2DF(0, -3);
             }
             // もし、下タンが押されていたら、位置に(0,-1)を足す。
             if (asd.Engine.Keyboard.GetKeyState(asd.Keys.Down) == asd.ButtonState.Hold)
             {
-                Position = Position + new asd.Vector2DF(0, 1);
+                Position = Position + new asd.Vector2DF(0, 3);
             }
             // もし、右ボタンが押されていたら、位置に(0,-1)を足す。
             if (asd.Engine.Keyboard.GetKeyState(asd.Keys.Right) == asd.ButtonState.Hold)
             {
-                Position = Position + new asd.Vector2DF(1, 0);
+                Position = Position + new asd.Vector2DF(3, 0);
             }
             // もし、左ボタンが押されていたら、位置に(0,-1)を足す。
             if (asd.Engine.Keyboard.GetKeyState(asd.Keys.Left) == asd.ButtonState.Hold)
             {
-                Position = Position + new asd.Vector2DF(-1, 0);
+                Position = Position + new asd.Vector2DF(-3, 0);
             }
 
             // もし、Zキーを押したら{}内の処理を行う。
@@ -53,6 +68,9 @@ namespace STG
                 // 弾のインスタンスをエンジンに追加する。
                 Layer.AddObject(bullet);
 
+                // ショットの効果音を再生する。
+                asd.Engine.Sound.Play(shotSound);
+
             }
 
             //もしXキーが押されたら、大きい弾を発射する。
@@ -61,6 +79,10 @@ namespace STG
                 Bullet bullet = new Bullet(Position + new asd.Vector2DF(0, -30), "Resources/PlayerBullet_Big.png");
                 // 弾のインスタンスをエンジンに追加する。
                 Layer.AddObject(bullet);
+                // ショットの効果音を再生する。
+                asd.Engine.Sound.Play(shotSound);
+
+
             }
 
             // プレイヤーの位置を取得する。
@@ -74,8 +96,6 @@ namespace STG
             // プレイヤーの位置を設定する。
             Position = position;
 
-            // プレイヤーの Radius は小さめにしておく
-            Radius = Texture.Size.X / 8.0f;
 
 
         }
@@ -84,9 +104,11 @@ namespace STG
         public override void OnCollide(CollidableObject obj)
         {
             // このインスタンスと同じ位置にエフェクトインスタンスを生成して、エンジンに追加する。
-            Layer.AddObject(new BreakObjectEffect(Position));
+            asd.Engine.AddObject2D(new BreakObjectEffect(Position));
+            asd.Engine.Sound.Play(deathSound);
             // ゲームからオブジェクトを消滅させる
             Dispose();
+
         }
 
         // 自機の弾との当たり判定をコントロールするメソッド
@@ -111,9 +133,6 @@ namespace STG
             }
 
         }
-
-
-
 
     }
 }

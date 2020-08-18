@@ -51,6 +51,8 @@ namespace STG
 
                 // moveVelocity3を速度ベクトルとして弾を発射する。
                 asd.Engine.AddObject2D(new StraightMovingEnemyBullet(Position, moveVelocity3));
+
+                asd.Engine.Sound.Play(shotSound);
             }
 
             //カウンタの増加機能を使いまわすため基底(Enemy)クラスのOnUpdateを呼び出す。

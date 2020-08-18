@@ -1,7 +1,0 @@
-D:\study\StudyDelivarable\Chapter6-4\Chapter6-4\bin\Debug\Chapter6-4.exe.config
-D:\study\StudyDelivarable\Chapter6-4\Chapter6-4\bin\Debug\Chapter6-4.exe
-D:\study\StudyDelivarable\Chapter6-4\Chapter6-4\bin\Debug\Chapter6-4.pdb
-D:\study\StudyDelivarable\Chapter6-4\Chapter6-4\obj\Debug\Chapter6-4.csprojAssemblyReference.cache
-D:\study\StudyDelivarable\Chapter6-4\Chapter6-4\obj\Debug\Chapter6-4.csproj.CoreCompileInputs.cache
-D:\study\StudyDelivarable\Chapter6-4\Chapter6-4\obj\Debug\Chapter6-4.exe
-D:\study\StudyDelivarable\Chapter6-4\Chapter6-4\obj\Debug\Chapter6-4.pdb

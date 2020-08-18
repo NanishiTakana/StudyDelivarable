@@ -1,3 +1,0 @@
-﻿1>------ ビルド開始: プロジェクト: Chapter6-4, 構成: Debug Any CPU ------
-1>  Chapter6-4 -> D:\study\StudyDelivarable\Chapter6-4\Chapter6-4\bin\Debug\Chapter6-4.exe
-========== ビルド: 1 正常終了、0 失敗、0 更新不要、0 スキップ ==========

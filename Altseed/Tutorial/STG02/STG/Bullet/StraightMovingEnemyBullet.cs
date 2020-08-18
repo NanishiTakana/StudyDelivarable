@@ -17,6 +17,8 @@ namespace STG
         {
             //　敵弾の速度ベクトルを設定する。
             moveVelocity = movevelocity;
+
+
         }
 
         protected override void OnUpdate()
@@ -25,6 +27,7 @@ namespace STG
             Position += moveVelocity;
 
             DisposeFromGame();
+
         }
     }
 }
