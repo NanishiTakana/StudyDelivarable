@@ -13,7 +13,9 @@ namespace STG
         {
             // Altseedを初期化する。
             asd.Engine.Initialize("STG", 640, 480, new asd.EngineOption());
-            
+
+            asd.Engine.File.AddRootPackageWithPassword("Resources.pack", "1234");
+
             // タイトルのシーンのインスタンスを生成する。
             TitleScene scene = new TitleScene();
 

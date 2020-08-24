@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bomb.cs" />
     <Compile Include="Bullet\Laser.cs" />
     <Compile Include="Enemy\Boss.cs" />
     <Compile Include="MovingBackground.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Bullet\StraightMovingEnemyBullet.cs" />
     <Compile Include="Scene\TitleScene.cs" />
     <Compile Include="Enemy\VortexShotEnemy.cs" />
+    <Compile Include="Score.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

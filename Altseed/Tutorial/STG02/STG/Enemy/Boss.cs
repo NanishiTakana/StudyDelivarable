@@ -33,7 +33,7 @@ namespace STG
             // base(pos, player) のところで、Enemyクラスのコンストラクタは実行されています
 
             // Boss のテクスチャを上書きする
-            Texture = asd.Engine.Graphics.CreateTexture2D("Resources/Boss.png");
+            Texture = asd.Engine.Graphics.CreateTexture2D("Boss.png");
 
             // CenterPositionを上書きする
             CenterPosition = new asd.Vector2DF(Texture.Size.X / 2.0f, Texture.Size.Y / 2.0f);
@@ -62,7 +62,7 @@ namespace STG
             // HPゲージを描画する
             DrawLineAdditionally(startHPLine, destHPLine, red, diameterHPLine, asd.AlphaBlendMode.Blend, 30);
 
-     // ボスの位置を更新
+            // ボスの位置を更新
             Position += moveVelocity;
 
             // 一定の間隔で速度を更新する
@@ -166,6 +166,10 @@ namespace STG
             {
                 // Bossを消去する
                 Dispose();
+                // スコアを加算
+                var scene = (GameScene)Layer.Scene;
+                scene.Score += 5;
+
             }
 
             // カウンタの増加機能を使いまわすため基底(Enemy)クラスのOnUpdateを呼び出す。

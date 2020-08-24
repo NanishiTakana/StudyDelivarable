@@ -19,7 +19,7 @@ namespace STG
 
 			// 背景画像を表示するオブジェクトのインスタンスを生成する。
 			asd.TextureObject2D background = new asd.TextureObject2D();
-			background.Texture = asd.Engine.Graphics.CreateTexture2D("Resources/Over.png");
+			background.Texture = asd.Engine.Graphics.CreateTexture2D("Over.png");
 
 			// レイヤーにオブジェクトのインスタンスを追加する。
 			layer.AddObject(background);

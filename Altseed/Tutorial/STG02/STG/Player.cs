@@ -14,19 +14,25 @@ namespace STG
         // 破壊されたときの効果音。
         private asd.SoundSource deathSound;
 
+        // ボムを発動した時の効果音。
+        private asd.SoundSource bombSound;
+
         public Player()
         {
             // 画像を読み込み、プレイヤーのインスタンスに画像を設定する。
-            Texture = asd.Engine.Graphics.CreateTexture2D("Resources/Player.png");
+            Texture = asd.Engine.Graphics.CreateTexture2D("Player.png");
             // プレイヤーのインスタンスに画像の中心位置を設定する。
             CenterPosition = new asd.Vector2DF(Texture.Size.X / 2.0f, Texture.Size.Y / 2.0f);
             // プレイヤーの位置を変更する。
             Position = new asd.Vector2DF(320, 240);
             // ショットの効果音を読み込む。
-            shotSound = asd.Engine.Sound.CreateSoundSource("Resources/Shot.wav", true);
+            shotSound = asd.Engine.Sound.CreateSoundSource("Shot.wav", true);
 
             // 破壊されたときの効果音を読み込む。
-            deathSound = asd.Engine.Sound.CreateSoundSource("Resources/Explode.wav", true);
+            deathSound = asd.Engine.Sound.CreateSoundSource("Explode.wav", true);
+
+            // ボムを発動したときの効果音を読み込む。
+            bombSound = asd.Engine.Sound.CreateSoundSource("Bomb.wav", true);
 
             // プレイヤーの Radius は小さめにしておく
             Radius = Texture.Size.X / 8.0f;
@@ -64,7 +70,7 @@ namespace STG
             // もし、Zキーを押したら{}内の処理を行う。
             if (asd.Engine.Keyboard.GetKeyState(asd.Keys.Z) == asd.ButtonState.Push)
             {
-                Bullet bullet = new Bullet(Position + new asd.Vector2DF(0, -30), "Resources/PlayerBullet.png");
+                Bullet bullet = new Bullet(Position + new asd.Vector2DF(0, -30), "PlayerBullet.png");
                 // 弾のインスタンスをエンジンに追加する。
                 Layer.AddObject(bullet);
 
@@ -76,12 +82,15 @@ namespace STG
             //もしXキーが押されたら、大きい弾を発射する。
             if (asd.Engine.Keyboard.GetKeyState(asd.Keys.X) == asd.ButtonState.Push)
             {
-                Bullet bullet = new Bullet(Position + new asd.Vector2DF(0, -30), "Resources/PlayerBullet_Big.png");
-                // 弾のインスタンスをエンジンに追加する。
-                Layer.AddObject(bullet);
-                // ショットの効果音を再生する。
-                asd.Engine.Sound.Play(shotSound);
+                for (int i = 0; i < 24; i++)
+                {
+                    // ボムを生成
+                    Bomb bomb = new Bomb(Position, 360 / 24 * i);
 
+                    // ボム オブジェクトをエンジンに追加
+                    asd.Engine.AddObject2D(bomb);
+                }
+                asd.Engine.Sound.Play(bombSound);
 
             }
 

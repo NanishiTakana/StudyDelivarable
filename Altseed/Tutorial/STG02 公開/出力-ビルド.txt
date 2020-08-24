@@ -1,0 +1,4 @@
+﻿1>------ ビルド開始: プロジェクト: STG, 構成: Debug x86 ------
+1>D:\study\StudyDelivarable\Altseed\Tutorial\STG02\STG\Enemy\Boss.cs(28,23,28,31): warning CS0649: フィールド 'Boss.laserRef' は割り当てられません。常に既定値 null を使用します。
+1>  STG -> D:\study\StudyDelivarable\Altseed\Tutorial\STG02\bin\STG.exe
+========== ビルド: 1 正常終了、0 失敗、0 更新不要、0 スキップ ==========

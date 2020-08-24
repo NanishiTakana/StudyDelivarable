@@ -28,7 +28,7 @@ namespace STG
             Position = pos;
 
             //　画像を読み込み、敵のインスタンスに画像を設定する。
-            Texture = asd.Engine.Graphics.CreateTexture2D("Resources/Enemy.png");
+            Texture = asd.Engine.Graphics.CreateTexture2D("Enemy.png");
 
             // 敵のインスタンスに画像の中心位置を設定する。
             CenterPosition = new asd.Vector2DF(Texture.Size.X / 2.0f, Texture.Size.Y / 2.0f);
@@ -44,10 +44,10 @@ namespace STG
             this.player = player;
 
             // ショットの効果音を読み込む。
-            shotSound = asd.Engine.Sound.CreateSoundSource("Resources/Shot2.wav", true);
+            shotSound = asd.Engine.Sound.CreateSoundSource("Shot2.wav", true);
 
             // 破壊されるときの効果音を読み込む。
-            deathSound = asd.Engine.Sound.CreateSoundSource("Resources/Explode.wav", true);
+            deathSound = asd.Engine.Sound.CreateSoundSource("Explode.wav", true);
 
         }
 
@@ -91,6 +91,11 @@ namespace STG
             asd.Engine.Sound.Play(deathSound);
             // ゲームからオブジェクトを消滅させる
             Dispose();
+
+            // スコアを加算
+            var scene = (GameScene)Layer.Scene;
+            scene.Score += 1;
+
         }
 
         // 自機の弾との当たり判定をコントロールするメソッド

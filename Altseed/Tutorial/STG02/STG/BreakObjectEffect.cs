@@ -32,7 +32,7 @@ namespace STG
 			CenterPosition = new asd.Vector2DF(TextureSize / 2, TextureSize / 2);
 
 			//　画像を読み込み、敵のインスタンスに画像を設定する。
-			Texture = asd.Engine.Graphics.CreateTexture2D("Resources/BreakObject.png");
+			Texture = asd.Engine.Graphics.CreateTexture2D("BreakObject.png");
 
 			// 設定された画像で実際に表示する範囲を設定する。
 			Src = new asd.RectF(0, 0, TextureSize, TextureSize);

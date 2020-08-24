@@ -47,7 +47,7 @@ namespace STG
             startAlpha = 50;
 
             // チャージの画像にsplitEnemyBulletを使用する
-            Texture = asd.Engine.Graphics.CreateTexture2D("Resources/splitEnemyBullet.png");
+            Texture = asd.Engine.Graphics.CreateTexture2D("splitEnemyBullet.png");
 
             // 中心座標をチャージ画像中心に設定する
             CenterPosition = new asd.Vector2DF(Texture.Size.X / 2.0f, Texture.Size.Y / 2.0f);

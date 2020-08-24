@@ -18,6 +18,9 @@ namespace STG
         // 敵の出現するレイヤーを持つ
         asd.Layer2D gameLayer;
 
+        // UIを表示するレイヤーを持つ
+        asd.Layer2D uiLayer;
+
         // ステージの最後にボスが出る
         Boss boss;
 
@@ -27,10 +30,19 @@ namespace STG
         // ゲームの経過時間を管理
         int count;
 
+        // スコアを管理
+        public int Score = 0;
+
         // ステージごとに敵を入れておくキューの配列(今回は3つ)
         Queue<Enemy>[] enemyQueues = new Queue<Enemy>[3];
 
-        
+        // BGM
+        asd.SoundSource bgm;
+
+        // 再生中のBGMを扱うためのID。
+        int? playingBgmId;
+
+
 
 
         protected override void OnRegistered()
@@ -38,6 +50,7 @@ namespace STG
             // 2Dを表示するレイヤーのインスタンスを生成する。
             gameLayer = new asd.Layer2D();
             asd.Layer2D backgroundLayer = new asd.Layer2D();
+            uiLayer = new asd.Layer2D();
 
             // レイヤーの描画優先度を設定する（デフォルトで0）
             backgroundLayer.DrawingPriority = -10;
@@ -46,17 +59,18 @@ namespace STG
             // シーンにレイヤーのインスタンスを追加する。
             AddLayer(gameLayer);
             AddLayer(backgroundLayer);
+            AddLayer(uiLayer);
 
             // Background オブジェクトを生成する。ここで画像のパスを設定します。
-            MovingBackground bg1 = new MovingBackground(new asd.Vector2DF(0.0f, 0.0f), "Resources/Game_Bg.png", 1.0f);
-            MovingBackground bg2 = new MovingBackground(new asd.Vector2DF(0.0f, -bg1.Texture.Size.Y), "Resources/Game_Bg.png", 1.0f);
+            MovingBackground bg1 = new MovingBackground(new asd.Vector2DF(0.0f, 0.0f), "Game_Bg.png", 1.0f);
+            MovingBackground bg2 = new MovingBackground(new asd.Vector2DF(0.0f, -bg1.Texture.Size.Y), "Game_Bg.png", 1.0f);
             // 赤い背景を生成する。
-            MovingBackground bgRed1 = new MovingBackground(new asd.Vector2DF(-2.0f, 30.0f), "Resources/Game_Bg_Red.png", 0.5f);
-            MovingBackground bgRed2 = new MovingBackground(new asd.Vector2DF(-2.0f, 30.0f - bgRed1.Texture.Size.Y), "Resources/Game_Bg_Red.png", 0.5f);
+            MovingBackground bgRed1 = new MovingBackground(new asd.Vector2DF(-2.0f, 30.0f), "Game_Bg_Red.png", 0.5f);
+            MovingBackground bgRed2 = new MovingBackground(new asd.Vector2DF(-2.0f, 30.0f - bgRed1.Texture.Size.Y), "Game_Bg_Red.png", 0.5f);
 
             // 黄色い背景を生成する。
-            MovingBackground bgYellow1 = new MovingBackground(new asd.Vector2DF(-10.0f, 80.0f), "Resources/Game_Bg_Yellow.png", 1.0f);
-            MovingBackground bgYellow2 = new MovingBackground(new asd.Vector2DF(-10.0f, 80.0f - bgRed1.Texture.Size.Y), "Resources/Game_Bg_Yellow.png", 1.0f);
+            MovingBackground bgYellow1 = new MovingBackground(new asd.Vector2DF(-10.0f, 80.0f), "Game_Bg_Yellow.png", 1.0f);
+            MovingBackground bgYellow2 = new MovingBackground(new asd.Vector2DF(-10.0f, 80.0f - bgRed1.Texture.Size.Y), "Game_Bg_Yellow.png", 1.0f);
 
             // 背景を背景レイヤーに追加する。
             backgroundLayer.AddObject(bg1);
@@ -72,8 +86,22 @@ namespace STG
             // プレイヤーのインスタンスをレイヤーに追加する。
             gameLayer.AddObject(player);
 
+            // レイヤーにスコアのインスタンスを追加する。
+            var score = new Score();
+            uiLayer.AddObject(score);
+
             // stage を初期化する
             initAllStage();
+
+            // BGMを読み込む。
+            bgm = asd.Engine.Sound.CreateSoundSource("Bgm.ogg", false);
+
+            // BGMがループするように設定する。
+            bgm.IsLoopingMode = true;
+
+            // BGMは流れていないのでIDはnull
+            playingBgmId = null;
+
         }
 
         protected override void OnUpdated()
@@ -86,6 +114,14 @@ namespace STG
 
                 // シーンを変更中にする。
                 isSceneChanging = true;
+
+                if (playingBgmId.HasValue)
+                {
+                    asd.Engine.Sound.FadeOut(playingBgmId.Value, 1.0f);
+                    playingBgmId = null;
+                }
+
+
             }
             // stage を更新する 
             updateStage();
@@ -169,6 +205,13 @@ namespace STG
 
         private void updateStage()
         {
+            // 60カウントのときに
+            if (count == 60)
+            {
+                // BGMを再生。再生のIDを保持しておく
+                playingBgmId = asd.Engine.Sound.Play(bgm);
+            }
+
             // ステージに対応するキューが空でないならば
             if (enemyQueues[stage].Count > 0)
             {
@@ -207,12 +250,24 @@ namespace STG
 
                         // ステージが進んだら count を 0 とする。
                         count = 0;
+
+                        // BGMが再生中ならば
+                        if (playingBgmId.HasValue)
+                        {
+                            // BGMをフェードアウトする。
+                            asd.Engine.Sound.FadeOut(playingBgmId.Value, 0.5f);
+                            // BGMが鳴っていないのでIDはnull
+                            playingBgmId = null;
+                        }
                     }
+
                 }
             }
+
             // updateStage ごとに count を進める
             ++count;
         }
 
     }
+
 }

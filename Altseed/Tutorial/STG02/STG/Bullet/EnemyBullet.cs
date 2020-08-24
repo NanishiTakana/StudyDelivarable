@@ -17,7 +17,7 @@ namespace STG
             Position = pos;
 
             //　画像を読み込み、敵弾のインスタンスに画像を設定する。
-            Texture = asd.Engine.Graphics.CreateTexture2D("Resources/EnemyBullet.png");
+            Texture = asd.Engine.Graphics.CreateTexture2D("EnemyBullet.png");
 
             // 敵弾のインスタンスに画像の中心位置を設定する。
             CenterPosition = new asd.Vector2DF(Texture.Size.X / 2.0f, Texture.Size.Y / 2.0f);
