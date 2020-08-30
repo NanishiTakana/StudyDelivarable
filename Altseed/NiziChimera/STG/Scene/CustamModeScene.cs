@@ -12,10 +12,27 @@ namespace STG
     {
         //頭を表示するレイヤーを持つ
         asd.Layer2D headLayer;
+        //体を表示するレイヤーを持つ
+        asd.Layer2D bodyLayer;
+        //体を表示するレイヤーを持つ
+        asd.Layer2D lowerLayer;
+
         //読み込んだカード情報の1行分を保持する
         string inputLine = "";
-        //読み込んだカード情報を格納する変数
-        ArrayList inputLineList = new ArrayList();
+        //カード情報の要素数
+        int amoCardInfo = 8;
+
+        //読み込んだカード情報の詳細を格納する変数
+        string[] inputInfoList ;
+
+        //読み込んだ頭カード情報の行分を格納する変数
+        List<string[]> inputLineList = new List<string[]>() ;
+
+        Random randomHead = new System.Random();
+
+        //静的？
+        //string headCardNum = randomHead.Next(1, 4).ToString("000");
+
 
         protected override void OnRegistered()
         {
@@ -25,23 +42,41 @@ namespace STG
             // シーンにレイヤーのインスタンスを追加する。
             AddLayer(headLayer);
 
-            using (StreamReader sr = new StreamReader(
-       "Resources/head.txt", Encoding.GetEncoding("UTF-8")))
+            inputInfoList = new string[amoCardInfo];
+            GetCardInfo(inputInfoList,"head");
+            GetCardInfo(inputInfoList, "body");
+            GetCardInfo(inputInfoList, "lower");
+
+            Console.WriteLine(inputLineList[1][0]);
+
+        }
+
+        private string[] GetCardInfo(string[] infoList,string getType)
+        {
+            using (StreamReader sr = new StreamReader($"Resources/{getType}.txt", Encoding.GetEncoding("UTF-8")))
             {
 
                 while ((inputLine = sr.ReadLine()) != null)
                 {
-                    inputLineList.Add(inputLine);
+                    infoList = inputLine.Split(',');
+                    inputLineList.Add(infoList);
                 }
-
-                for (int i = 0; i < inputLineList.Count; i++)
-                {
-                    Console.WriteLine(inputLineList[i]);
-                }
-
-
             }
 
+            string CardNum = randomHead.Next(1, 4).ToString("000");
+
+            asd.TextureObject2D headImage = new asd.TextureObject2D();
+            headImage.Texture = asd.Engine.Graphics.CreateTexture2D($"Resources/{getType}/{getType}{CardNum}.png");
+            Console.WriteLine($"Resources/{getType}/{getType}{CardNum}.png");
+            headImage.Position = new asd.Vector2DF(320, 240);
+            headImage.Scale = new asd.Vector2DF(0.5f, 0.5f);
+
+            // レイヤーにオブジェクトのインスタンスを追加する。
+            headLayer.AddObject(headImage);
+            return infoList;
         }
+
     }
+
+
 }

@@ -12,7 +12,7 @@ namespace STG
 		static void Main(string[] args)
 		{
 			// Altseedを初期化する。
-			asd.Engine.Initialize("STG", 640, 480, new asd.EngineOption());
+			asd.Engine.Initialize("STG", 980, 840, new asd.EngineOption());
 
 			CustamModeScene custamModeScene = new CustamModeScene();
 			asd.Engine.ChangeSceneWithTransition(custamModeScene, new asd.TransitionFade(0,1.0f));
