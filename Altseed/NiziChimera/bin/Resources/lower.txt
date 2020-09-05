@@ -1,0 +1,3 @@
+001,TukinoMito,to,lower,4,33,13,ムカデ,234,103
+002,Kuzuha,zu,lower,4,33,13,吸血鬼,205,59
+003,HanabatakeChaika,ika,lower,35,24,10,オカマエルフ,209,104

@@ -1,0 +1,3 @@
+001,Tukino,Tuki,head,7,36,18,ムカデ,56,232
+002,Kuzuha,Ku,head,35,24,10,吸血鬼,54,198
+003,HanabatakeChaika,Hana,head,35,24,10,オカマエルフ,60,208
