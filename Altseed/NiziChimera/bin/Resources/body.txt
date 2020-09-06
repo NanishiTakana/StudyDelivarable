@@ -1,3 +1,0 @@
-001,TukinoMito,noMi,body,7,36,18,ムカデ,56,78,457
-002,Kuzuha,zu,body,35,24,10,吸血鬼,56,54,470
-003,HanabatakeChaika,batakeCha,body,35,24,10,オカマエルフ,60,148,465

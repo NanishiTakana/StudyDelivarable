@@ -1,0 +1,4 @@
+No	フルネーム	分解時ネーム	部位	戦闘力	頭脳	狂気	説明	結合部幅	結合部高さ	胴結合部高さ
+1	TukinoMito	noMi	body	7	36	18	ムカデ	56	78	457
+2	Kuzuha	zu	body	35	24	10	吸血鬼	56	54	470
+3	HanabatakeChaika	batakeCha	body	35	24	10	オカマエルフ	60	148	455

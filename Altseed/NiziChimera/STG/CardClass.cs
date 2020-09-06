@@ -57,7 +57,7 @@ namespace STG
 
         public void getCardInfo(string getType)
         {
-            using (StreamReader sr = new StreamReader($"Resources/{getType}.txt", Encoding.GetEncoding("UTF-8")))
+            using (StreamReader sr = new StreamReader($"Resources/{getType}.csv", Encoding.GetEncoding("Shift-JIS")))
             {
 
                 while ((inputLine = sr.ReadLine()) != null)

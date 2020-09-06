@@ -47,7 +47,6 @@ namespace STG
 
         protected override void OnRegistered()
         {
-
             // シーンにレイヤーのインスタンスを追加する。
             AddLayer(lowerLayer);
             AddLayer(bodyLayer);
@@ -97,7 +96,6 @@ namespace STG
                 Console.WriteLine("数値に変換できません");
             }
             return num;
-
         }
 
         public void Click()
@@ -117,15 +115,11 @@ namespace STG
 
                 ImageUnion(headCardNum, bodyCardNum, lowerCardNum);
 
-
-
-
             }
             else
             {
                 stateText.Text = "左ボタンが押されていません。";
             }
-
 
         }
 
@@ -136,47 +130,46 @@ namespace STG
             headCard.Texture = asd.Engine.Graphics.CreateTexture2D($"Resources/head/head{headNum.ToString("000")}.png");
 
             //画像の中心点のY座標をデータファイルから取得
-            int headCenterY = IntParse(headCard.getCardComponent(headNum - 1, 9));
+            int headCenterY = IntParse(headCard.getCardComponent(headNum, 9));
             headCard.CenterPosition = new asd.Vector2DF(headCard.Texture.Size.X / 2.0f, headCenterY);
 
             headCard.Position = new asd.Vector2DF(xLine, yLine);
             headCard.Scale = new asd.Vector2DF(0.5f, 0.5f);
-
 
             //体
             //画像の読み込み
             bodyCard.Texture = asd.Engine.Graphics.CreateTexture2D($"Resources/body/body{bodyNum.ToString("000")}.png");
 
             //画像の中心点のY座標をデータファイルから取得
-            int bodyCenterY = IntParse(bodyCard.getCardComponent(bodyNum - 1, 9));
-            bodyCard.CenterPosition = new asd.Vector2DF(bodyCard.Texture.Size.X / 2.0f, bodyCenterY);
+            int bodyCenterY = IntParse(bodyCard.getCardComponent(bodyNum , 9));
+            Console.WriteLine(bodyCenterY);
 
+            bodyCard.CenterPosition = new asd.Vector2DF(bodyCard.Texture.Size.X / 2.0f, bodyCenterY);
+            Console.WriteLine(bodyCenterY);
+            Console.WriteLine(bodyCard.CenterPosition);
             //頭と同じ座標に表示
             bodyCard.Position = headCard.Position;
-            //頭と体の大きさの比率を計算
-            bodyRatio = (float)IntParse(headCard.getCardComponent(bodyNum - 1, 8)) /
-                        IntParse(bodyCard.getCardComponent(bodyNum - 1, 8));
 
+            //頭と体の大きさの比率を計算
+            bodyRatio = (float)IntParse(headCard.getCardComponent(headNum , 8)) / IntParse(bodyCard.getCardComponent(bodyNum , 8));
+
+            Console.WriteLine(bodyRatio);
             bodyCard.Scale = new asd.Vector2DF(bodyRatio * 0.5f, bodyRatio * 0.5f);
+            Console.WriteLine(bodyCard.Scale);
 
             //足
-
             lowerCard.Texture = asd.Engine.Graphics.CreateTexture2D($"Resources/lower/lower{lowerNum.ToString("000")}.png");
 
-            int lowerCenterY = IntParse(lowerCard.getCardComponent(lowerNum - 1, 9));
+            int lowerCenterY = IntParse(lowerCard.getCardComponent(lowerNum, 9));
             lowerCard.CenterPosition = new asd.Vector2DF(lowerCard.Texture.Size.X / 2.0f, lowerCenterY);
 
-            int bodyUnionY = IntParse(bodyCard.getCardComponent(bodyNum - 1, 10));
-            lowerCard.Position = new asd.Vector2DF(xLine, bodyUnionY / 2.0f + bodyCard.Position.Y);
+            int bodyUnionY = IntParse(bodyCard.getCardComponent(bodyNum, 10));
+            lowerCard.Position = new asd.Vector2DF
+                (xLine, bodyUnionY / 2.0f + bodyCard.Position.Y - lowerCenterY * bodyRatio * 0.5f );
 
             lowerCard.Scale = new asd.Vector2DF(0.5f, 0.5f);
-
-
         }
 
-
     }
-
-
 
 }
