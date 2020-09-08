@@ -16,16 +16,22 @@ namespace STG
         asd.Layer2D bodyLayer = new asd.Layer2D();
         //足を表示するレイヤーのインスタンスを生成
         asd.Layer2D lowerLayer = new asd.Layer2D();
+        //境界線を表示するレイヤーを作成する
+        asd.Layer2D lineLayer = new asd.Layer2D();
+
         // マウスの状態を表示するテキストを生成する。
-
         asd.TextObject2D stateText;
-
 
         //カードのインスタンスを生成
         CardClass headCard = new CardClass("head");
         CardClass bodyCard = new CardClass("body");
         CardClass lowerCard = new CardClass("lower");
 
+        //境界線オブジェクトの生成
+
+        asd.GeometryObject2D boundaryLineObj = new asd.GeometryObject2D();
+
+   
         //表示基準座標
         int xLine = 300;
         int yLine = 150;
@@ -51,12 +57,14 @@ namespace STG
             AddLayer(lowerLayer);
             AddLayer(bodyLayer);
             AddLayer(headLayer);
+            AddLayer(lineLayer);
 
             var font = asd.Engine.Graphics.CreateDynamicFont("", 40, new asd.Color(255, 255, 255, 255), 1, new asd.Color(0, 0, 0, 255));
             stateText = new asd.TextObject2D();
             stateText.Position = new asd.Vector2DF(10, 10);
             stateText.Font = font;
 
+            //各部位のランダム値を表示
             //頭
             headCardNum = randomNum.Next(1, 4);
             //体
@@ -70,8 +78,9 @@ namespace STG
             headLayer.AddObject(headCard);
             bodyLayer.AddObject(bodyCard);
             lowerLayer.AddObject(lowerCard);
-
             headLayer.AddObject(stateText);
+            lineLayer.AddObject(boundaryLineObj);
+
 
         }
 
@@ -135,6 +144,7 @@ namespace STG
 
             headCard.Position = new asd.Vector2DF(xLine, yLine);
             headCard.Scale = new asd.Vector2DF(0.5f, 0.5f);
+            DrawLine((int)headCenterY );
 
             //体
             //画像の読み込み
@@ -142,20 +152,18 @@ namespace STG
 
             //画像の中心点のY座標をデータファイルから取得
             int bodyCenterY = IntParse(bodyCard.getCardComponent(bodyNum , 9));
-            Console.WriteLine(bodyCenterY);
-
             bodyCard.CenterPosition = new asd.Vector2DF(bodyCard.Texture.Size.X / 2.0f, bodyCenterY);
-            Console.WriteLine(bodyCenterY);
-            Console.WriteLine(bodyCard.CenterPosition);
+
             //頭と同じ座標に表示
             bodyCard.Position = headCard.Position;
+
+            //DrawLine((int)bodyCard.Position.Y);
 
             //頭と体の大きさの比率を計算
             bodyRatio = (float)IntParse(headCard.getCardComponent(headNum , 8)) / IntParse(bodyCard.getCardComponent(bodyNum , 8));
 
             Console.WriteLine(bodyRatio);
             bodyCard.Scale = new asd.Vector2DF(bodyRatio * 0.5f, bodyRatio * 0.5f);
-            Console.WriteLine(bodyCard.Scale);
 
             //足
             lowerCard.Texture = asd.Engine.Graphics.CreateTexture2D($"Resources/lower/lower{lowerNum.ToString("000")}.png");
@@ -164,10 +172,31 @@ namespace STG
             lowerCard.CenterPosition = new asd.Vector2DF(lowerCard.Texture.Size.X / 2.0f, lowerCenterY);
 
             int bodyUnionY = IntParse(bodyCard.getCardComponent(bodyNum, 10));
-            lowerCard.Position = new asd.Vector2DF
-                (xLine, bodyUnionY / 2.0f + bodyCard.Position.Y - lowerCenterY * bodyRatio * 0.5f );
 
-            lowerCard.Scale = new asd.Vector2DF(0.5f, 0.5f);
+            //下半身と胴体の比率計算
+            lowerRatio = (float)IntParse(bodyCard.getCardComponent(bodyNum, 11)) / IntParse(lowerCard.getCardComponent(lowerNum, 8)) * bodyRatio;
+
+            lowerCard.Position = new asd.Vector2DF
+                (xLine, bodyUnionY * 0.5f * bodyRatio + bodyCard.Position.Y  - lowerCenterY * bodyRatio * 0.5f );
+            //DrawLine((int)lowerCard.Position.Y);
+
+
+
+            //DrawLine((float)bodyRatio * IntParse(bodyCard.getCardComponent(bodyNum, 11))  + bodyCard.Position.Y);
+
+            lowerCard.Scale = new asd.Vector2DF(0.5f * lowerRatio , 0.5f * lowerRatio);
+        }
+
+
+        public void DrawLine(float position )
+        {
+            var boundaryLine = new asd.LineShape();
+            boundaryLine.StartingPosition = new asd.Vector2DF(00, position);
+            boundaryLine.EndingPosition = new asd.Vector2DF(800, position);
+            boundaryLine.Thickness = 4;
+
+            boundaryLineObj.Shape = boundaryLine;
+
         }
 
     }
