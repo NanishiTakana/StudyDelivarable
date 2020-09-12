@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CardClass.cs" />
-    <Compile Include="MouseClick.cs" />
+    <Compile Include="ButtonClass.cs" />
     <Compile Include="Scene\CustamModeScene.cs" />
     <Compile Include="Scene\GameScene.cs" />
     <Compile Include="Program.cs" />

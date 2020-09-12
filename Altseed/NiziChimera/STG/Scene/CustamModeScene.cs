@@ -10,12 +10,18 @@ namespace STG
 {
     class CustamModeScene : asd.Scene
     {
+        //UIを表示するレイヤーのインスタンスを作成
+        asd.Layer2D UILayer = new asd.Layer2D();
         //頭を表示するレイヤーのインスタンスを生成
         asd.Layer2D headLayer = new asd.Layer2D();
         //体を表示するレイヤーのインスタンスを生成
         asd.Layer2D bodyLayer = new asd.Layer2D();
         //足を表示するレイヤーのインスタンスを生成
         asd.Layer2D lowerLayer = new asd.Layer2D();
+        //後ろ髪を表示するレイヤーのインスタンス作成
+        asd.Layer2D hairLayer = new asd.Layer2D();
+
+
         //境界線を表示するレイヤーを作成する
         asd.Layer2D lineLayer = new asd.Layer2D();
 
@@ -26,6 +32,10 @@ namespace STG
         CardClass headCard = new CardClass("head");
         CardClass bodyCard = new CardClass("body");
         CardClass lowerCard = new CardClass("lower");
+        CardClass hairCard = new CardClass("hair");
+
+        //ボタンのインスタンスの生成
+        ButtonClass randomButton = new ButtonClass("randomButton");
 
         //境界線オブジェクトの生成
 
@@ -54,9 +64,12 @@ namespace STG
         protected override void OnRegistered()
         {
             // シーンにレイヤーのインスタンスを追加する。
+            AddLayer(UILayer);
+            AddLayer(hairLayer);
             AddLayer(lowerLayer);
             AddLayer(bodyLayer);
             AddLayer(headLayer);
+
             AddLayer(lineLayer);
 
             var font = asd.Engine.Graphics.CreateDynamicFont("", 40, new asd.Color(255, 255, 255, 255), 1, new asd.Color(0, 0, 0, 255));
@@ -74,11 +87,20 @@ namespace STG
 
             ImageUnion(headCardNum, bodyCardNum, lowerCardNum);
 
+            //ボタンの表示
+            randomButton.Position = new asd.Vector2DF(500,400);
+            randomButton.Scale = new asd.Vector2DF(0.6f,0.6f);
+
+
             // レイヤーにオブジェクトのインスタンスを追加する。
+            UILayer.AddObject(randomButton);
+            hairLayer.AddObject(hairCard);
             headLayer.AddObject(headCard);
             bodyLayer.AddObject(bodyCard);
             lowerLayer.AddObject(lowerCard);
+
             headLayer.AddObject(stateText);
+
             lineLayer.AddObject(boundaryLineObj);
 
 
@@ -109,26 +131,34 @@ namespace STG
 
         public void Click()
         {
-
             // 左ボタンが押されているかを表示する。
             if (asd.Engine.Mouse.LeftButton.ButtonState == asd.MouseButtonState.Push)
             {
-                stateText.Text = "左ボタンが押されています。";
+                if (randomButton.ScorpeJudge(0.7f))
+                {
 
-                //頭
-                headCardNum = randomNum.Next(1, 4);
-                //体
-                bodyCardNum = randomNum.Next(1, 4);
-                //足
-                lowerCardNum = randomNum.Next(1, 4);
+                    Console.WriteLine(asd.Engine.Mouse.Position);
 
-                ImageUnion(headCardNum, bodyCardNum, lowerCardNum);
+                    stateText.Text = "左ボタンが押されています。";
+
+                    //頭
+                    headCardNum = randomNum.Next(1, 4);
+                    //体
+                    bodyCardNum = randomNum.Next(1, 4);
+                    //足
+                    lowerCardNum = randomNum.Next(1, 4);
+
+                    ImageUnion(headCardNum, bodyCardNum, lowerCardNum);
+
+                }
+                else
+                {
+                    stateText.Text = "左ボタンが押されていません。";
+                }
 
             }
-            else
-            {
-                stateText.Text = "左ボタンが押されていません。";
-            }
+
+  
 
         }
 
@@ -161,6 +191,26 @@ namespace STG
             headCard.Position =  bodyCard.Position;
             headCard.Scale = new asd.Vector2DF(0.5f * headRatio , 0.5f * headRatio);
 
+            //後ろ髪
+            if ((headCard.getCardComponent(headNum, 10) == "0"))
+            {
+                hairCard.Texture = asd.Engine.Graphics.CreateTexture2D($"Resources/hair/hair000.png");
+                Console.WriteLine("testAAA");
+            }
+            else
+            {
+                Console.WriteLine("test");
+                hairCard.Texture = asd.Engine.Graphics.CreateTexture2D($"Resources/hair/hair{headNum.ToString("000")}.png");
+            }
+
+            //画像の中心点をと位置を頭と合わせる
+            hairCard.CenterPosition = headCard.CenterPosition;
+            hairCard.Position = headCard.Position;
+
+            //頭の比率を計算
+            hairCard.Scale = headCard.Scale;
+
+
             //足
             lowerCard.Texture = asd.Engine.Graphics.CreateTexture2D($"Resources/lower/lower{lowerNum.ToString("000")}.png");
 
@@ -174,12 +224,7 @@ namespace STG
 
             lowerCard.Position = new asd.Vector2DF
                 (xLine + IntParse(bodyCard.getCardComponent(bodyNum, 12)) * 0.5f , bodyUnionY * 0.5f  + bodyCard.Position.Y   - bodyCenterY * 0.5f);
-            //DrawLine((int)lowerCard.Position.Y);
 
-
-
-            DrawLine(bodyUnionY * 0.5f  + bodyCard.Position.Y   - bodyCenterY  * 0.5f);
-            Console.WriteLine((float)IntParse(bodyCard.getCardComponent(bodyNum, 11)) + bodyCard.Position.Y);
 
             lowerCard.Scale = new asd.Vector2DF(0.5f * lowerRatio , 0.5f * lowerRatio);
         }
