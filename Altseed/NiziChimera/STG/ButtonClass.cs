@@ -9,27 +9,75 @@ namespace STG
 {
     class ButtonClass : TextureObject2D
     {
-        public ButtonClass(string buttonName)
+        Texture2D defoltTexture;
+        Texture2D holdTexture;
+        Texture2D pushTexture;
+
+        public ButtonClass(int fileNo)
         {
-            Texture = asd.Engine.Graphics.CreateTexture2D($"Resources/button/{buttonName}.png");
+
+            defoltTexture = SystemDate.ButtonTexture[fileNo, 0];
+            holdTexture = SystemDate.ButtonTexture[fileNo, 1];
+            pushTexture = SystemDate.ButtonTexture[fileNo, 2];
+
+            Texture = defoltTexture ;
 
         }
 
 
-        public bool ScorpeJudge(float ratio)
+        protected override void OnUpdate()
+        {
+            base.OnUpdate();
+
+        }
+
+
+        public bool ScorpeJudge()
         {
             //ボタンの範囲内の場合、trueを返す
-            Console.WriteLine(Position.Y);
-            Console.WriteLine(Position.Y + Texture.Size.Y);
-            Console.WriteLine(Position.X);
-            Console.WriteLine(Position.X + Texture.Size.X);
 
             return  asd.Engine.Mouse.Position.X > Position.X &&
-                    asd.Engine.Mouse.Position.X < Position.X + Texture.Size.X  * ratio&&
+                    asd.Engine.Mouse.Position.X < Position.X + Texture.Size.X &&
                     asd.Engine.Mouse.Position.Y > Position.Y &&
-                    asd.Engine.Mouse.Position.Y < Position.Y + Texture.Size.Y * ratio;
+                    asd.Engine.Mouse.Position.Y < Position.Y + Texture.Size.Y ;
 
         }
+
+        public void MouseOver()
+        {
+            // 左ボタンが押されているかを表示する。
+            if (asd.Engine.Mouse.LeftButton.ButtonState == asd.MouseButtonState.Free)
+            {
+                if (ScorpeJudge())
+                {
+                    Texture = holdTexture;
+
+                }
+                else
+                {
+                    Texture = defoltTexture;
+                }
+
+            }
+
+        }
+
+        public void MouseClick()
+        {
+            // 左ボタンが押されているかを表示する。
+            if (asd.Engine.Mouse.LeftButton.ButtonState == asd.MouseButtonState.Push)
+            {
+                if (ScorpeJudge())
+                {
+                    Texture = pushTexture;
+
+                }
+
+            }
+
+        }
+
+
 
 
 

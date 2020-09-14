@@ -15,6 +15,10 @@ namespace STG
 			asd.Engine.Initialize("STG", 1280, 720, new asd.EngineOption());
 			//asd.Engine.IsFullscreenMode = true;
 
+			//初期データをロードする
+			SystemDate.ButtonLoad();
+
+			//
 			CustamModeScene custamModeScene = new CustamModeScene();
 			asd.Engine.ChangeSceneWithTransition(custamModeScene, new asd.TransitionFade(0,1.0f));
 

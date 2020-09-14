@@ -35,7 +35,7 @@ namespace STG
         CardClass hairCard = new CardClass("hair");
 
         //ボタンのインスタンスの生成
-        ButtonClass randomButton = new ButtonClass("randomButton");
+        ButtonClass randomButton = new ButtonClass(0);
 
         //境界線オブジェクトの生成
 
@@ -79,17 +79,17 @@ namespace STG
 
             //各部位のランダム値を表示
             //頭
-            headCardNum = randomNum.Next(1, 4);
+            headCardNum = randomNum.Next(1, 5);
             //体
-            bodyCardNum = randomNum.Next(1, 4);
+            bodyCardNum = randomNum.Next(1, 5);
             //足
-            lowerCardNum = randomNum.Next(1, 4);
+            lowerCardNum = randomNum.Next(1, 5);
 
             ImageUnion(headCardNum, bodyCardNum, lowerCardNum);
 
             //ボタンの表示
             randomButton.Position = new asd.Vector2DF(500,400);
-            randomButton.Scale = new asd.Vector2DF(0.6f,0.6f);
+            randomButton.Scale = new asd.Vector2DF(1,1);
 
 
             // レイヤーにオブジェクトのインスタンスを追加する。
@@ -111,6 +111,9 @@ namespace STG
         {
 
             Click();
+            randomButton.MouseOver();
+            randomButton.MouseClick();
+
         }
 
 
@@ -134,7 +137,7 @@ namespace STG
             // 左ボタンが押されているかを表示する。
             if (asd.Engine.Mouse.LeftButton.ButtonState == asd.MouseButtonState.Push)
             {
-                if (randomButton.ScorpeJudge(0.7f))
+                if (randomButton.ScorpeJudge())
                 {
 
                     Console.WriteLine(asd.Engine.Mouse.Position);
@@ -142,11 +145,11 @@ namespace STG
                     stateText.Text = "左ボタンが押されています。";
 
                     //頭
-                    headCardNum = randomNum.Next(1, 4);
+                    headCardNum = randomNum.Next(1, 5);
                     //体
-                    bodyCardNum = randomNum.Next(1, 4);
+                    bodyCardNum = randomNum.Next(1, 5);
                     //足
-                    lowerCardNum = randomNum.Next(1, 4);
+                    lowerCardNum = randomNum.Next(1, 5);
 
                     ImageUnion(headCardNum, bodyCardNum, lowerCardNum);
 
@@ -158,9 +161,9 @@ namespace STG
 
             }
 
-  
-
         }
+
+
 
         public void ImageUnion(int headNum, int bodyNum, int lowerNum)
         {

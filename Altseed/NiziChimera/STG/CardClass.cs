@@ -37,8 +37,9 @@ namespace STG
         //一覧からカードを読み込む
         public CardClass(string cardType )
         {
-          
 
+
+          
             if (cardType == "head")
             {
                 getCardInfo("head");
@@ -59,7 +60,6 @@ namespace STG
         {
             using (StreamReader sr = new StreamReader($"Resources/{getType}.csv", Encoding.GetEncoding("Shift-JIS")))
             {
-
                 while ((inputLine = sr.ReadLine()) != null)
                 {
                     inputInfoList = inputLine.Split(',');
