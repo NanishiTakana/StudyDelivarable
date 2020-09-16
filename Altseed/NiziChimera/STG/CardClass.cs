@@ -14,7 +14,7 @@ namespace STG
         public string cardNumber;
         //ライバー名
         public string fULLName;
-        public string splitName ;
+        public string splitName;
         //カードの属性
         public string cardType;
         //カード説明
@@ -35,11 +35,11 @@ namespace STG
         public List<string[]> inputLineList = new List<string[]>();
 
         //一覧からカードを読み込む
-        public CardClass(string cardType )
+        public CardClass(string cardType)
         {
 
 
-          
+
             if (cardType == "head")
             {
                 getCardInfo("head");
@@ -69,13 +69,14 @@ namespace STG
 
         }
 
-        public string getCardComponent(int cardNo,int factorNo)
+        public string getCardComponent(int cardNo, int factorNo)
         {
             return inputLineList[cardNo][factorNo];
 
         }
 
-
-
     }
+
+
+
 }
