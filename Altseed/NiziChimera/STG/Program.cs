@@ -17,6 +17,7 @@ namespace STG
 
 			//初期データをロードする
 			SystemDate.ButtonLoad();
+			SystemDate.AllCardLoad();
 
 			//
 			CustamModeScene custamModeScene = new CustamModeScene();

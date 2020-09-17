@@ -156,10 +156,20 @@ namespace STG
 
                     stateText.Text = "左ボタンが押されています。";
 
+                    //文字列消去
+                    for (int n = 0; n < name2.Count ;n++)
+                    {
+                        name2[n].Text = "";
+                    }
+
+
+
+
                     //頭
                     headCardNum = randomNum.Next(1, 5);
                     //体
                     bodyCardNum = randomNum.Next(1, 5);
+                    Console.WriteLine(bodyCardNum);
                     //足
                     lowerCardNum = randomNum.Next(1, 5);
 
@@ -182,7 +192,8 @@ namespace STG
         {
             // 体
             //画像の読み込み
-            bodyCard.Texture = asd.Engine.Graphics.CreateTexture2D($"Resources/body/body{bodyNum.ToString("000")}.png");
+            bodyCard.Texture = SystemDate.BodyCardTexture[bodyNum];
+
 
             //画像の中心点のY座標をデータファイルから取得
             int bodyCenterY = IntParse(bodyCard.getCardComponent(bodyNum, 9));
@@ -195,7 +206,7 @@ namespace STG
 
             //頭
             //画像の読み込み
-            headCard.Texture = asd.Engine.Graphics.CreateTexture2D($"Resources/head/head{headNum.ToString("000")}.png");
+            headCard.Texture = SystemDate.HeadCardTexture[headNum];
 
             //画像の中心点のY座標をデータファイルから取得
             int headCenterY = IntParse(headCard.getCardComponent(headNum, 9));
@@ -210,11 +221,11 @@ namespace STG
             //後ろ髪
             if ((headCard.getCardComponent(headNum, 10) == "0"))
             {
-                hairCard.Texture = asd.Engine.Graphics.CreateTexture2D($"Resources/hair/hair000.png");
+                hairCard.Texture = SystemDate.HairTexture[0];
             }
             else
             {
-                hairCard.Texture = asd.Engine.Graphics.CreateTexture2D($"Resources/hair/hair{headNum.ToString("000")}.png");
+                hairCard.Texture = SystemDate.HairTexture[headNum];
             }
 
             //画像の中心点をと位置を頭と合わせる
@@ -226,7 +237,7 @@ namespace STG
 
 
             //足
-            lowerCard.Texture = asd.Engine.Graphics.CreateTexture2D($"Resources/lower/lower{lowerNum.ToString("000")}.png");
+            lowerCard.Texture = SystemDate.LowerCardTexture[lowerNum];
 
             int lowerCenterY = IntParse(lowerCard.getCardComponent(lowerNum, 9));
             lowerCard.CenterPosition = new asd.Vector2DF(lowerCard.Texture.Size.X / 2.0f, lowerCenterY);
@@ -300,7 +311,6 @@ namespace STG
                 //
 
                 name2.Add(new asd.TextObject2D());
-                Console.WriteLine("tst");
                 name2[n].Text = unionName[n].ToString();
                 name2[n].Position = new asd.Vector2DF(30, 50 + 50 * n);
                 name2[n].Font = font;
@@ -308,7 +318,7 @@ namespace STG
 
 
                 //NameLayer.AddObject(name[n]);
-                //NameLayer.Clear;
+                //NameLayer.Clear();
                 NameLayer.AddObject(name2[n]);
             }
 
