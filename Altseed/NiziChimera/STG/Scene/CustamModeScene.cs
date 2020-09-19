@@ -40,18 +40,20 @@ namespace STG
         ButtonClass randomButton = new ButtonClass(0);
 
         //境界線オブジェクトの生成
-
         asd.GeometryObject2D boundaryLineObj = new asd.GeometryObject2D();
 
+        static int nameLim = 20; //最大文字数
 
         //名前オブジェクトの生成
-        asd.TextObject2D[] name;
+        asd.TextObject2D[] name = new asd.TextObject2D[nameLim];
         List<asd.TextObject2D> name2 = new List<asd.TextObject2D>();
 
 
         //表示基準座標
-        int xLine = 300;
+        int xLine = 600;
         int yLine = 150;
+
+
 
         //幅比率
         float headRatio;
@@ -66,6 +68,11 @@ namespace STG
         int bodyCardNum;
         //足
         int lowerCardNum;
+
+        //カード最大値
+        int maxCardNum = 6;
+        //カード最小値
+        int minCardNum = 1;
 
 
         protected override void OnRegistered()
@@ -86,23 +93,28 @@ namespace STG
             stateText.Font = font;
 
 
+            for (int n = 0; n < nameLim; n++)
+            {
+                name[n] = new asd.TextObject2D();
+                name[n].Font = font;
+                NameLayer.AddObject(name[n]);
+            }
+
             //各部位のランダム値を表示
             //頭
-            headCardNum = randomNum.Next(1, 5);
+            headCardNum = randomNum.Next(minCardNum, maxCardNum);
             //体
-            bodyCardNum = randomNum.Next(1, 5);
+            bodyCardNum = randomNum.Next(minCardNum, maxCardNum);
             //足
-            lowerCardNum = randomNum.Next(1, 5);
+            lowerCardNum = randomNum.Next(minCardNum, maxCardNum);
 
             ImageUnion(headCardNum, bodyCardNum, lowerCardNum);
 
             //ボタンの表示
-            randomButton.Position = new asd.Vector2DF(500, 400);
+            randomButton.Position = new asd.Vector2DF(800, 400);
             randomButton.Scale = new asd.Vector2DF(1, 1);
 
-            name2.Clear();
-            unionName();
-
+            UnionName();
 
             // レイヤーにオブジェクトのインスタンスを追加する。
             UILayer.AddObject(randomButton);
@@ -135,7 +147,7 @@ namespace STG
             int num = 0;
             if (int.TryParse(str, out num))
             {
-                Console.WriteLine($"変換成功{num}");
+                //Console.WriteLine($"変換成功{num}");
             }
             else
             {
@@ -151,35 +163,19 @@ namespace STG
             {
                 if (randomButton.ScorpeJudge())
                 {
-
-                    Console.WriteLine(asd.Engine.Mouse.Position);
-
-                    stateText.Text = "左ボタンが押されています。";
-
-                    //文字列消去
-                    for (int n = 0; n < name2.Count ;n++)
-                    {
-                        name2[n].Text = "";
-                    }
-
-
-
-
                     //頭
-                    headCardNum = randomNum.Next(1, 5);
+                    headCardNum = randomNum.Next(minCardNum, maxCardNum);
                     //体
-                    bodyCardNum = randomNum.Next(1, 5);
-                    Console.WriteLine(bodyCardNum);
+                    bodyCardNum = randomNum.Next(minCardNum, maxCardNum);
                     //足
-                    lowerCardNum = randomNum.Next(1, 5);
+                    lowerCardNum = randomNum.Next(minCardNum, maxCardNum);
 
                     ImageUnion(headCardNum, bodyCardNum, lowerCardNum);
-                    name2.Clear();
-                    unionName();
+                    UnionName();
                 }
                 else
                 {
-                    stateText.Text = "左ボタンが押されていません。";
+
                 }
 
             }
@@ -194,12 +190,11 @@ namespace STG
             //画像の読み込み
             bodyCard.Texture = SystemDate.BodyCardTexture[bodyNum];
 
-
             //画像の中心点のY座標をデータファイルから取得
             int bodyCenterY = IntParse(bodyCard.getCardComponent(bodyNum, 9));
             bodyCard.CenterPosition = new asd.Vector2DF(bodyCard.Texture.Size.X / 2.0f, bodyCenterY);
 
-            //頭と同じ座標に表示
+            //表示
             bodyCard.Position = new asd.Vector2DF(xLine, yLine);
             bodyCard.Scale = new asd.Vector2DF(0.5f, 0.5f);
 
@@ -214,6 +209,9 @@ namespace STG
 
             //体と頭の大きさの比率を計算
             headRatio = (float)IntParse(bodyCard.getCardComponent(bodyNum, 8)) / IntParse(headCard.getCardComponent(headNum, 8));
+
+
+            Console.WriteLine(headRatio);
 
             headCard.Position = bodyCard.Position;
             headCard.Scale = new asd.Vector2DF(0.5f * headRatio, 0.5f * headRatio);
@@ -266,7 +264,7 @@ namespace STG
 
         }
 
-        public string getSplitName(int cardNo, string cardType)
+        public string GetSplitName(int cardNo, string cardType)
         {
 
             if (cardType == "head")
@@ -289,43 +287,26 @@ namespace STG
         }
 
 
-        public void unionName()
+        public void UnionName()
         {
-            string headName = getSplitName(headCardNum, "head");
-            string bodyName = getSplitName(bodyCardNum, "body");
-            string lowerName = getSplitName(lowerCardNum, "lower");
+            //文字列消去
+            for (int n = 0; n < nameLim; n++)
+            {
+                name[n].Text = "";
+            }
+
+            string headName = GetSplitName(headCardNum, "head");
+            string bodyName = GetSplitName(bodyCardNum, "body");
+            string lowerName = GetSplitName(lowerCardNum, "lower");
             string unionName = headName + bodyName + lowerName;
-
-
-            name = new asd.TextObject2D[unionName.Length];
-            var font = asd.Engine.Graphics.CreateDynamicFont("", 40, new asd.Color(255, 255, 255, 255), 1, new asd.Color(0, 0, 0, 255));
 
             for (int n = 0; n < unionName.Length; n++)
             {
-                //name[n] = new asd.TextObject2D();
-                //name[n].Position = new asd.Vector2DF(30 , 50 + 50 * n);
-                //name[n].Font = font;
-                //name[n].Text = unionName[n].ToString();
-                
-                
-                //
-
-                name2.Add(new asd.TextObject2D());
-                name2[n].Text = unionName[n].ToString();
-                name2[n].Position = new asd.Vector2DF(30, 50 + 50 * n);
-                name2[n].Font = font;
-
-
-
-                //NameLayer.AddObject(name[n]);
-                //NameLayer.Clear();
-                NameLayer.AddObject(name2[n]);
+                name[n].Position = new asd.Vector2DF(300, 50 + 50 * n);
+                name[n].Text = unionName[n].ToString();
             }
 
         }
-
-
-
 
 
     }

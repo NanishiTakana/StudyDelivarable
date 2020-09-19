@@ -54,12 +54,11 @@ namespace STG
             int headFileNum = FileCount("head");
             int bodyFileNum = FileCount("body");
             int lowerFileNum = FileCount("lower");
-            int hairFileNum = FileCount("hair");
 
             HeadCardTexture = new Texture2D[headFileNum];
             BodyCardTexture = new Texture2D[bodyFileNum];
             LowerCardTexture = new Texture2D[lowerFileNum];
-            HairTexture = new Texture2D[hairFileNum]; 
+            HairTexture = new Texture2D[headFileNum]; 
 
             //頭ファイルの読み込み
             for (int m = 0; m < headFileNum; m++)
@@ -78,9 +77,19 @@ namespace STG
                 LowerCardTexture[m] = asd.Engine.Graphics.CreateTexture2D($"Resources/lower/lower{m.ToString("000")}.png");
             }
             //髪ファイルの読み込み
-            for (int m = 0; m < hairFileNum; m++)
+            for (int m = 0; m < headFileNum; m++)
             {
-                HairTexture[m] = asd.Engine.Graphics.CreateTexture2D($"Resources/hair/hair{m.ToString("000")}.png");
+                if (System.IO.File.Exists($"Resources/hair/hair{m.ToString("000")}.png"))
+                {
+                    HairTexture[m] = asd.Engine.Graphics.CreateTexture2D($"Resources/hair/hair{m.ToString("000")}.png");
+                }
+                else
+                {
+                    HairTexture[m] = asd.Engine.Graphics.CreateTexture2D($"Resources/hair/hair000.png");
+                }
+
+
+
             }
 
 
