@@ -110,7 +110,21 @@ namespace STG
 
             return FileNum;
 
+        }
 
+        //String => Int変換メソッド
+        public static int IntParse(string str)
+        {
+            int num = 0;
+            if (int.TryParse(str, out num))
+            {
+                //Console.WriteLine($"変換成功{num}");
+            }
+            else
+            {
+                Console.WriteLine("数値に変換できません");
+            }
+            return num;
         }
 
 

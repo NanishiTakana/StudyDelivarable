@@ -20,8 +20,10 @@ namespace STG
 			SystemDate.AllCardLoad();
 
 			//
-			CustamModeScene custamModeScene = new CustamModeScene();
-			asd.Engine.ChangeSceneWithTransition(custamModeScene, new asd.TransitionFade(0,1.0f));
+
+			TitleScene titleScene = new TitleScene();
+
+			asd.Engine.ChangeSceneWithTransition(titleScene, new asd.TransitionFade(0, 1.0f));
 
 
 			// Altseedのウインドウが閉じられていないか確認する。

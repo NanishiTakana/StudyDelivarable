@@ -11,6 +11,7 @@ namespace STG
         //頭を表示するレイヤーを持つ
         asd.Layer2D headLayer;
 
+
         protected override void OnRegistered()
         {
             // 2Dを表示するレイヤーのインスタンスを生成する。
